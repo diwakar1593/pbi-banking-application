@@ -2,10 +2,11 @@ const express = require('express')
 const NotFoundError = require( './middleware/404Handling' )
 const ApiError = require( './utils/ApiError' )
 const app = express()
+const morgan = require("morgan")
 
 // # json parsing
 app.use(express.json({}))
-
+app.use(morgan("dev"))
 app.use("/api/v1",require("./router"))
 
 app.get('/', (req, res) => {
