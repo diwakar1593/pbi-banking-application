@@ -43,11 +43,11 @@ class AuthService{
         }
     }
 
-    static async profileUser(user){
-        const userd = await UserModel.findById(user)
+    static async profileUser(userId){
+        const user = await UserModel.findById(userId)
         .select("name email ac_type createdAt -_id")
 
-        if(!userd){
+        if(!user){
             throw new ApiError(401,"Profile Not Found")
         }
         return user
