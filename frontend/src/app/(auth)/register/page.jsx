@@ -6,9 +6,10 @@ import * as yup from 'yup'
 import { toast } from 'react-toastify';
 import CustomAuthButton from '@/src/components/reuseable/CustomAuthButton';
 import Link from 'next/link';
+import { useMainContext } from '@/src/context/MainContext';
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false)
-
+  const {fetchUserProfile} = useMainContext() 
   // const [states, setStates] = useState()
   // const onChangeHandler = (e)=>{
   //   setStates({...states,[e.target.name]:e.target.value})
@@ -39,6 +40,10 @@ const RegisterPage = () => {
       toast.success(data.msg)
 
       // token
+      localStorage.setItem("token",data.token)
+
+      await fetchUserProfile()
+
       helpers.resetForm()
     } catch (error) {
       // console.log(error.message);
@@ -50,47 +55,47 @@ const RegisterPage = () => {
 
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <div className="w-full xl:w-[60%] flex items-start border">
+      <div className="min-h-[90vh] flex items-center justify-center ">
+        <div className="w-full xl:w-[50%] flex items-start border bg-[#0A0A2A]">
           <div className="hidden lg:block bg-white">
-            <img src="https://bfsi.eletsonline.com/wp-content/uploads/2023/07/Yono-SBI.jpg" className='h-full w-full object-cover' alt='' />
+            <img src="/images/homeimage.png" className='h-full w-full object-cover' alt='home' />
           </div>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmitHandler}
           >
-            <Form className=" w-full lg:w-1/2 px-10 py-10">
-              <div className="mb-3">
-                <Field type="text" name='name' className="w-full py-3 px-3 rounded border outline-none" placeholder="Enter Your Name" />
+            <Form className=" h-full w-full lg:w-1/2 px-10 py-10">
+              <div className="mb-5">
+                <Field type="text" name='name' className="w-full py-3 px-3 rounded border outline-none placeholder-white text-white" placeholder="Enter Your Name" />
                 <ErrorMessage name='name' className='text-red-500' component={'p'} />
               </div>
 
-              <div className="mb-3">
-                <Field type="text" name='email' className="w-full py-3 px-3 rounded border outline-none" placeholder="Enter Your Email" />
+              <div className="mb-5">
+                <Field type="text" name='email' className="w-full py-3 px-3 rounded border outline-none placeholder-white text-white" placeholder="Enter Your Email" />
                 <ErrorMessage name='email' className='text-red-500' component={'p'} />
               </div>
 
-              <div className="mb-3">
-                <Field type="text" name='password' className="w-full py-3 px-3 rounded border outline-none" placeholder="Enter Your Password" />
+              <div className="mb-5">
+                <Field type="password" name='password' className="w-full py-3 px-3 rounded border outline-none placeholder-white text-white" placeholder="Enter Your Password" />
                 <ErrorMessage name='password' className='text-red-500' component={'p'} />
               </div>
 
-              <div className="mb-3">
-                <Field as="select" name='ac_type' className="w-full py-3 px-3 rounded border outline-none" id="">
-                  <option value="">Select Account Type</option>
+              <div className="mb-5">
+                <Field as="select" name='ac_type' className="w-full py-3 px-3 rounded border outline-none bg-[#0A0A2A] text-white" id="" >
+                  <option value="" >Select Account Type</option>
                   <option value="saving">Saving</option>
                   <option value="current">Current</option>
                 </Field>
                 <ErrorMessage name='ac_type' className='text-red-500' component={'p'} />
               </div>
 
-              <div className="mb-3">
-                <CustomAuthButton isLoading={loading} text='Register' type='submit' />
+              <div className="mb-5">
+                <CustomAuthButton isLoading={loading} text={'Register'} type='submit' />
               </div>
 
-              <div className="mb-3">
-                <p className='text-end font-medium'>Already Have An Account ? <Link href={'/login'} className='text-blue-600 '>Login</Link> </p>
+              <div className="mb-5">
+                <p className='text-end font-medium text-white'>Already Have An Account ? <Link href={'/login'} className='text-blue-600 '>Login</Link> </p>
               </div>
 
             </Form>

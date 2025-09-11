@@ -33,13 +33,15 @@ class AuthService{
             throw new ApiError(400,"Email Already Exists")
         }
             
-            const user = await UserModel.create({
-                name, email, password, ac_type
-            })
+        const user = await UserModel.create({
+            name, email, password, ac_type
+        })
             
-            return{
+        const token = JWTService.GenerateToken(user._id)
+
+        return{
             msg:"Register Success",
-            "token":"123"
+            "token":token
         }
     }
 

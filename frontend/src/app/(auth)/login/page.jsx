@@ -1,60 +1,92 @@
 "use client";
 import { axiosClient } from '@/src/utils/AxiosClient';
 import React, {useState} from 'react'
-
+import { Formik, Form, ErrorMessage, Field } from 'formik'
+import * as yup from 'yup'
+import { toast } from 'react-toastify';
+import CustomAuthButton from '@/src/components/reuseable/CustomAuthButton';
+import Link from 'next/link';
+import { useMainContext } from '@/src/context/MainContext';
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false)
+  const {fetchUserProfile} = useMainContext() 
 
-  const [states, setStates] = useState({
-    name:'',
+  // const [states, setStates] = useState()
+  // const onChangeHandler = (e)=>{
+  //   setStates({...states,[e.target.name]:e.target.value})
+  // }
+
+  const initialValues = {
     email:'',
-    password:'',
-    ac_type:''
-  })
-  const onChangeHandler = (e)=>{
-    setStates({...states,[e.target.name]:e.target.value})
+    password:''
   }
 
-  const onSubmitHandler = async(e)=>{
-    e.preventDefault();
+  const validationSchema = yup.object({
+    email : yup.string().email("Email must be a valid email").required("Email is required"),
+    password : yup.string().required("Password is required")
+  })
+
+  const onSubmitHandler = async(values, helpers)=>{
     try {
-      const response = await axiosClient.post('/auth/register',states)
+      setLoading(true)
+      const response = await axiosClient.post('/auth/login',values)
       const data = await response.data
-      console.log(data);
+
+
+      // console.log(data);
+
+      toast.success(data.msg)
+
+      // token
+      localStorage.setItem("token",data.token)
+      
+      await fetchUserProfile()
+
+      helpers.resetForm()
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
+      toast.error(error.response.data.msg || error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <form onSubmit={onSubmitHandler} className="w-1/2 px-10 py-10 border">
-
-          <div className="mb-3">
-            <input type="text" value={states.name} onChange={onChangeHandler} name='name' className="w-full py-3 px-3 rounded border outline-none" />
+      <div className="min-h-[90vh] flex items-center justify-center ">
+        <div className="w-full xl:w-[50%] flex items-start border bg-[#0A0A2A]">
+          <div className="hidden lg:block bg-white">
+            <img src="/images/homeimage.png" className='h-full w-full object-cover' alt='home' />
           </div>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmitHandler}
+          >
+            <Form className=" h-full w-full lg:w-1/2 px-10 py-10">
 
-          <div className="mb-3">
-            <input type="text" value={states.email} onChange={onChangeHandler}  name='email' className="w-full py-3 px-3 rounded border outline-none" />
-          </div>
+              <div className="mb-5">
+                <Field type="text" name='email' className="w-full py-3 px-3 rounded border outline-none placeholder-white text-white" placeholder="Enter Your Email" />
+                <ErrorMessage name='email' className='text-red-500' component={'p'} />
+              </div>
 
-          <div className="mb-3">
-            <input type="text" value={states.password} onChange={onChangeHandler}  name='password' className="w-full py-3 px-3 rounded border outline-none" />
-          </div>
+              <div className="mb-5">
+                <Field type="password" name='password' className="w-full py-3 px-3 rounded border outline-none placeholder-white text-white" placeholder="Enter Your Password" />
+                <ErrorMessage name='password' className='text-red-500' component={'p'} />
+              </div>
 
-          <div className="mb-3">
-            <select name='ac_type' value={states.ac_type} onChange={onChangeHandler}  className="w-full py-3 px-3 rounded border outline-none" id="">
-              <option value="">Select Account Type</option>
-              <option value="saving">Saving</option>
-              <option value="current">Current</option>
-            </select>
-          </div>
+              <div className="mb-5">
+                <CustomAuthButton isLoading={loading} text={'Login'} type='submit' />
+              </div>
 
-          <div className="mb-3">
-            <button className="w-full py-4 text-center text-lg bg-rose-600 rounded text-white">Login</button>
-          </div>
+              <div className="mb-5">
+                <p className='text-end font-medium text-white'>Don't Have An Account ? <Link href={'/register'} className='text-blue-600 '>Register</Link> </p>
+              </div>
 
-        </form>
+            </Form>
+          </Formik>
+        </div>
+
       </div>
     </>
   )
