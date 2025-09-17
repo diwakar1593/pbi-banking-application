@@ -3,6 +3,7 @@ import Loader from '@/src/components/Loader';
 import { useMainContext } from '@/src/context/MainContext';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
 const RootTemplate = ({children}) => {
 
@@ -24,11 +25,25 @@ const RootTemplate = ({children}) => {
             <Loader/>
         </div>
     }
-  return (
-    <>
-        {children}
-    </>
-  )
+    return (
+        <>
+           <section className='flex item-start'>
+                <Sidebar breakPoint='lg'>
+                        <Menu>
+                            <SubMenu label="Charts">
+                            <MenuItem> Pie charts </MenuItem>
+                            <MenuItem> Line charts </MenuItem>
+                            </SubMenu>
+                            <MenuItem> Documentation </MenuItem>
+                            <MenuItem> Calendar </MenuItem>
+                        </Menu>
+                    </Sidebar>
+                    <main className='px-1 md:px-4'>    
+                        {children}
+                    </main>
+           </section>
+        </>
+    )
 }
 
 export default RootTemplate
