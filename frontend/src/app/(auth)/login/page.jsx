@@ -7,9 +7,11 @@ import { toast } from 'react-toastify';
 import CustomAuthButton from '@/src/components/reuseable/CustomAuthButton';
 import Link from 'next/link';
 import { useMainContext } from '@/src/context/MainContext';
+import { useRouter } from 'next/navigation';
 const LoginPage = () => {
   const [loading, setLoading] = useState(false)
   const {fetchUserProfile} = useMainContext() 
+  const router = useRouter()
 
   // const [states, setStates] = useState()
   // const onChangeHandler = (e)=>{
@@ -42,6 +44,7 @@ const LoginPage = () => {
       
       await fetchUserProfile()
 
+      router.push('/')
       helpers.resetForm()
     } catch (error) {
       // console.log(error.message);

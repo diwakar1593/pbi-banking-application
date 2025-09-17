@@ -7,9 +7,11 @@ import { toast } from 'react-toastify';
 import CustomAuthButton from '@/src/components/reuseable/CustomAuthButton';
 import Link from 'next/link';
 import { useMainContext } from '@/src/context/MainContext';
+import { useRouter } from 'next/navigation';
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false)
   const {fetchUserProfile} = useMainContext() 
+  const router = useRouter()
   // const [states, setStates] = useState()
   // const onChangeHandler = (e)=>{
   //   setStates({...states,[e.target.name]:e.target.value})
@@ -43,6 +45,8 @@ const RegisterPage = () => {
       localStorage.setItem("token",data.token)
 
       await fetchUserProfile()
+
+      router.push('/')
 
       helpers.resetForm()
     } catch (error) {
