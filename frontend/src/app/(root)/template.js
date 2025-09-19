@@ -7,6 +7,8 @@ import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsToggle, SidebarSlicePath } from '@/src/redux/slice/sidebarSlice';
 import Link from 'next/link';
+import { MdDashboard } from 'react-icons/md';
+import { GiFalloutShelter } from 'react-icons/gi';
 
 const RootTemplate = ({children}) => {
 
@@ -31,10 +33,18 @@ const RootTemplate = ({children}) => {
         </div>
     }
 
-    const CustomMenu = ({link, text}) => {
+    const CustomMenu = ({link, text, Icon}) => {
         const pathname = usePathname();
         return <>
-            <MenuItem component={<Link href={link} />}> {text} </MenuItem>
+            <MenuItem
+                style={{
+                    background: pathname === link ? '#145dfb':'#ffff',
+                    color: pathname === link ? 'white':'black',
+                    borderRadius: pathname === link ? '10px':'0px'
+                }}
+                icon={<Icon className="text-2xl" />}
+                component={<Link href={link} />}> {text} 
+            </MenuItem>
         </>
     }
 
@@ -42,12 +52,12 @@ const RootTemplate = ({children}) => {
         <>
            <section className='flex item-start'>
                 <Sidebar breakPoint='lg' toggled={isToggle} onBackdropClick={() => dispatch(setIsToggle())}>
-                        <Menu className='!bg-white !min-h-screen lg:!min-h-[90vh] px-3 py-10'>
-                            <CustomMenu link={'/'} text={'Home'}/>
-                            <MenuItem> Calendar </MenuItem>
+                        <Menu className='!bg-white !min-h-screen lg:!min-h-[90vh]'>
+                            <CustomMenu link={'/'} text={'Home'} Icon={MdDashboard}/>
+                            <CustomMenu link={'/profile'} text={'Profile'} Icon={GiFalloutShelter}/>
                         </Menu>
                     </Sidebar>
-                    <main className='px-1 md:px-4'>    
+                    <main className='px-1 md:px-3 w-full'>    
                         {children}
                     </main>
            </section>
