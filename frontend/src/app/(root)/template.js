@@ -9,6 +9,7 @@ import { setIsToggle, SidebarSlicePath } from '@/src/redux/slice/sidebarSlice';
 import Link from 'next/link';
 import { MdDashboard } from 'react-icons/md';
 import { GiFalloutShelter } from 'react-icons/gi';
+import { GrCurrency } from 'react-icons/gr';
 
 const RootTemplate = ({children}) => {
 
@@ -52,8 +53,9 @@ const RootTemplate = ({children}) => {
         <>
            <section className='flex item-start'>
                 <Sidebar breakPoint='lg' toggled={isToggle} onBackdropClick={() => dispatch(setIsToggle())}>
-                        <Menu className='!bg-white !min-h-screen lg:!min-h-[90vh]'>
+                        <Menu className='!bg-white !min-h-screen lg:!min-h-[90vh] px-3 py-10'>
                             <CustomMenu link={'/'} text={'Home'} Icon={MdDashboard}/>
+                            <CustomMenu link={'/amount'} text={'Amount'} Icon={GrCurrency}/>
                             <CustomMenu link={'/profile'} text={'Profile'} Icon={GiFalloutShelter}/>
                         </Menu>
                     </Sidebar>
